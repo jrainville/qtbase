@@ -119,14 +119,14 @@ class QBalloonTip : public QWidget
 public:
     static void showBalloon(const QIcon &icon, const QString &title,
                             const QString &msg, QSystemTrayIcon *trayIcon,
-                            const QPoint &pos, int timeout, bool showArrow = true);
+                            const QPoint &pos, int timeout, bool showArrow = true, const QString &notificationId = "");
     static void hideBalloon();
     static bool isBalloonVisible();
     static void updateBalloonPosition(const QPoint& pos);
 
 private:
     QBalloonTip(const QIcon &icon, const QString &title,
-                const QString &msg, QSystemTrayIcon *trayIcon);
+                const QString &msg, QSystemTrayIcon *trayIcon, const QString &notificationId);
     ~QBalloonTip();
     void balloon(const QPoint&, int, bool);
 
@@ -141,6 +141,7 @@ private:
     QPixmap pixmap;
     int timerId;
     bool showArrow;
+    QString notificationId;
 };
 
 QT_END_NAMESPACE

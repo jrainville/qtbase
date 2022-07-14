@@ -98,7 +98,7 @@ public:
     void updateMenu(QPlatformMenu *menu) override;
     QPlatformMenu *createMenu() const override;
     void showMessage(const QString &title, const QString &msg,
-                     const QIcon &icon, MessageIcon iconType, int msecs) override;
+                     const QIcon &icon, MessageIcon iconType, int msecs, const QString &notificationId) override;
 
     bool isSystemTrayAvailable() const override;
     bool supportsMessages() const override { return true; }
@@ -146,6 +146,7 @@ private:
     QDBusPlatformMenu *m_menu;
     QXdgNotificationInterface *m_notifier;
     QString m_instanceId;
+    QString m_notificationId;
     QString m_category;
     QString m_defaultStatus;
     QString m_status;

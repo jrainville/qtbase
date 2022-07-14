@@ -101,13 +101,13 @@ public Q_SLOTS:
     void setVisible(bool visible);
     inline void show() { setVisible(true); }
     inline void hide() { setVisible(false); }
-    void showMessage(const QString &title, const QString &msg, const QIcon &icon, int msecs = 10000);
+    void showMessage(const QString &title, const QString &msg, const QIcon &icon, int msecs = 10000, const QString &notificationId = "");
     void showMessage(const QString &title, const QString &msg,
-                     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information, int msecs = 10000);
+                     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information, int msecs = 10000, const QString &notificationId = "");
 
 Q_SIGNALS:
     void activated(QSystemTrayIcon::ActivationReason reason);
-    void messageClicked();
+    void messageClicked(QString notificationId);
 
 protected:
     bool event(QEvent *event) override;

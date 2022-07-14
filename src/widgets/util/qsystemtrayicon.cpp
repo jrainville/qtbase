@@ -401,7 +401,7 @@ bool QSystemTrayIcon::supportsMessages()
 }
 
 /*!
-    \fn void QSystemTrayIcon::showMessage(const QString &title, const QString &message, MessageIcon icon, int millisecondsTimeoutHint)
+    \fn void QSystemTrayIcon::showMessage(const QString &title, const QString &message, MessageIcon icon, int millisecondsTimeoutHint, const QString &notificationId)
     \since 4.3
 
     Shows a balloon message for the entry with the given \a title, \a message and
@@ -423,15 +423,16 @@ bool QSystemTrayIcon::supportsMessages()
     \sa show(), supportsMessages()
   */
 void QSystemTrayIcon::showMessage(const QString& title, const QString& msg,
-                            QSystemTrayIcon::MessageIcon msgIcon, int msecs)
+                            QSystemTrayIcon::MessageIcon msgIcon, int msecs,
+                            const QString &notificationId)
 {
     Q_D(QSystemTrayIcon);
     if (d->visible)
-        d->showMessage_sys(title, msg, messageIcon2qIcon(msgIcon), msgIcon, msecs);
+        d->showMessage_sys(title, msg, messageIcon2qIcon(msgIcon), msgIcon, msecs, notificationId);
 }
 
 /*!
-    \fn void QSystemTrayIcon::showMessage(const QString &title, const QString &message, const QIcon &icon, int millisecondsTimeoutHint)
+    \fn void QSystemTrayIcon::showMessage(const QString &title, const QString &message, const QIcon &icon, int millisecondsTimeoutHint, const QString &notificationId)
 
     \overload showMessage()
 
@@ -441,11 +442,12 @@ void QSystemTrayIcon::showMessage(const QString& title, const QString& msg,
     \since 5.9
 */
 void QSystemTrayIcon::showMessage(const QString &title, const QString &msg,
-                            const QIcon &icon, int msecs)
+                            const QIcon &icon, int msecs,
+                            const QString &notificationId)
 {
     Q_D(QSystemTrayIcon);
     if (d->visible)
-        d->showMessage_sys(title, msg, icon, QSystemTrayIcon::NoIcon, msecs);
+        d->showMessage_sys(title, msg, icon, QSystemTrayIcon::NoIcon, msecs, notificationId);
 }
 
 void QSystemTrayIconPrivate::_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason reason)
@@ -459,13 +461,13 @@ static QBalloonTip *theSolitaryBalloonTip = 0;
 
 void QBalloonTip::showBalloon(const QIcon &icon, const QString &title,
                               const QString &message, QSystemTrayIcon *trayIcon,
-                              const QPoint &pos, int timeout, bool showArrow)
+                              const QPoint &pos, int timeout, bool showArrow, const QString &notificationId)
 {
     hideBalloon();
     if (message.isEmpty() && title.isEmpty())
         return;
 
-    theSolitaryBalloonTip = new QBalloonTip(icon, title, message, trayIcon);
+    theSolitaryBalloonTip = new QBalloonTip(icon, title, message, trayIcon, notificationId);
     if (timeout < 0)
         timeout = 10000; //10 s default
     theSolitaryBalloonTip->balloon(pos, timeout, showArrow);
@@ -494,12 +496,13 @@ bool QBalloonTip::isBalloonVisible()
 }
 
 QBalloonTip::QBalloonTip(const QIcon &icon, const QString &title,
-                         const QString &message, QSystemTrayIcon *ti)
+                         const QString &message, QSystemTrayIcon *ti, const QString &notificationId)
     : QWidget(0, Qt::ToolTip),
       trayIcon(ti),
       timerId(-1),
       showArrow(true)
 {
+    notificationId = notificationId;
     setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(ti, SIGNAL(destroyed()), this, SLOT(close()));
 

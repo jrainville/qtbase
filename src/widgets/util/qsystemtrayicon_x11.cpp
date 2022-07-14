@@ -337,18 +337,18 @@ bool QSystemTrayIconPrivate::supportsMessages_sys()
 }
 
 void QSystemTrayIconPrivate::showMessage_sys(const QString &title, const QString &message,
-                                   const QIcon &icon, QSystemTrayIcon::MessageIcon msgIcon, int msecs)
+                                   const QIcon &icon, QSystemTrayIcon::MessageIcon msgIcon, int msecs, const QString &notificationId)
 {
     if (qpa_sys) {
         qpa_sys->showMessage(title, message, icon,
-                         static_cast<QPlatformSystemTrayIcon::MessageIcon>(msgIcon), msecs);
+                         static_cast<QPlatformSystemTrayIcon::MessageIcon>(msgIcon), msecs, notificationId);
         return;
     }
     if (!sys)
         return;
     QBalloonTip::showBalloon(icon, title, message, sys->systemTrayIcon(),
                              sys->globalGeometry().center(),
-                             msecs);
+                             msecs, true, notificationId);
 }
 
 QT_END_NAMESPACE

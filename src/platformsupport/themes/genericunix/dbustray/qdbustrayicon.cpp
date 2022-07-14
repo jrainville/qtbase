@@ -282,8 +282,9 @@ void QDBusTrayIcon::updateMenu(QPlatformMenu * menu)
 }
 
 void QDBusTrayIcon::showMessage(const QString &title, const QString &msg, const QIcon &icon,
-                                QPlatformSystemTrayIcon::MessageIcon iconType, int msecs)
+                                QPlatformSystemTrayIcon::MessageIcon iconType, int msecs, const QString &notificationId)
 {
+    m_notificationId = notificationId;
     m_messageTitle = title;
     m_message = msg;
     m_attentionIcon = icon;
